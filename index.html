@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucho Chávez</title>
+    <meta name="description" content="Lucho Chávez - Locutor Nacional">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Navbar (visible on all sections except Principal) -->
+    <nav class="top-navbar hidden">
+        <h1 class="name">Lucho Chávez</h1>
+        <div class="top-navbar-links">
+            <a href="#principal" class="nav-link" data-section="principal">Inicio</a>
+            <a href="#trayectoria" class="nav-link" data-section="trayectoria">Trayectoria</a>
+            <a href="#prensa" class="nav-link" data-section="prensa">Prensa</a>
+            <a href="#destacados" class="nav-link" data-section="destacados">Destacados</a>
+            <a href="#fotos" class="nav-link" data-section="fotos">Fotos</a>
+            <a href="#contacto" class="nav-link" data-section="contacto">Contacto</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar visible">
+            <h1 class="name">Lucho Chávez</h1>
+            <p class="sidebar-description">Locutor Nacional</p>
+            <p class="sidebar-description">Matr. 15533</p>
+            
+            <nav class="navigation">
+                <a href="#inicio" class="nav-link active" data-section="principal">Inicio</a>
+                <a href="#trayectoria" class="nav-link" data-section="trayectoria">Trayectoria</a>
+                <a href="#prensa" class="nav-link" data-section="prensa">Prensa</a>
+                <a href="#destacados" class="nav-link" data-section="destacados">Destacados</a>
+                <a href="#fotos" class="nav-link" data-section="fotos">Fotos</a>
+                <a href="#contacto" class="nav-link" data-section="contacto">Contacto</a>
+            </nav>
+            <!-- INICIO DE CAMBIO: IMAGEN DE SPONSOR -->
+            <div class="sponsor-logo-wrapper">
+                <img src="./img/fotoinferior.png" alt="Sponsor Logo" />
+            </div>
+            <!-- FIN DE CAMBIO: IMAGEN DE SPONSOR -->
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content with-sidebar">
+            <!-- Principal Section (Landing page with circular photo) -->
+            <section id="principal" class="section active">
+                <div class="hero-image-wrapper">
+                    <img src="./img/luchointrodeprueba.jpg" alt="Lucho Chávez - Principal" />
+                </div>
+            </section>
+
+            <!-- Trayectoria Section -->
+            <section id="trayectoria" class="section content-section">
+                <div class="content-block">
+                    <h2 class="section-title">Trayectoria</h2>
+                    <div class="media-grid">
+                        <div class="media-item">
+                            <video controls src="/placeholder.mp4?height=500&width=300&query=video de trayectoria 1"></video>
+                            <h3 class="media-title">Entrevista en Radio Nacional</h3>
+                            <p class="media-description">Fragmento de una entrevista en vivo sobre mi carrera y proyectos actuales.</p>
+                        </div>
+                        <div class="media-item">
+                            <video controls src="/placeholder.mp4?height=500&width=300&query=video de trayectoria 2"></video>
+                            <h3 class="media-title">Conducción de Evento</h3>
+                            <p class="media-description">Momentos destacados de mi participación como maestro de ceremonias en un evento importante.</p>
+                        </div>
+                        <div class="media-item">
+                            <video controls src="/placeholder.mp4?height=500&width=300&query=video de trayectoria 3"></video>
+                            <h3 class="media-title">Demo de Voz en Off</h3>
+                            <p class="media-description">Recopilación de mis trabajos de voz en off para diversas campañas publicitarias.</p>
+                        </div>
+                        <div class="media-item">
+                            <img src="/placeholder.png?height=500&width=300" alt="Sesión de fotos profesional" />
+                            <h3 class="media-title">Sesión de Fotos Profesional</h3>
+                            <p class="media-description">Imágenes de mi última sesión de fotos para medios y prensa.</p>
+                        </div>
+                        <div class="media-item">
+                            <img src="/placeholder.png?height=500&width=300" alt="En el estudio de grabación" />
+                            <h3 class="media-title">En el Estudio de Grabación</h3>
+                            <p class="media-description">Un vistazo detrás de cámaras durante una jornada de grabación.</p>
+                        </div>
+                        <div class="media-item">
+                            <img src="/placeholder.png?height=500&width=300" alt="Participación en programa de TV" />
+                            <h3 class="media-title">Participación en Programa de TV</h3>
+                            <p class="media-description">Mi aparición como invitado en un reconocido programa de televisión.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prensa Section -->
+            <section id="prensa" class="section content-section">
+                <div class="content-block">
+                    <h2 class="section-title">Prensa</h2>
+                    <!-- Contenido anterior eliminado -->
+                </div>
+            </section>
+
+            <!-- Destacados Section -->
+            <section id="destacados" class="section content-section">
+                <h2 class="section-title">Destacados</h2>
+                <div class="highlights-content">
+                    <!-- Contenido anterior eliminado -->
+                </div>
+            </section>
+
+            <!-- Fotos Section -->
+            <section id="fotos" class="section content-section">
+                <h2 class="section-title">Fotos</h2>
+                <div class="large-photo-grid">
+                    <!-- Row 1: Large left, two stacked right -->
+                    <div class="large-photo-item large-photo-item-1">
+                        <img src="./img/fotoprof1.jpg" alt="Retrato profesional 1" />
+                    </div>
+                    <div class="large-photo-item large-photo-item-2">
+                        <img src="./img/fotoprof2.jpg" alt="Retrato profesional 2" />
+                    </div>
+                    <div class="large-photo-item large-photo-item-3">
+                        <img src="./img/fotoprof3.jpg" alt="Retrato profesional 3" />
+                    </div>
+                    <!-- Row 2: Full width image -->
+                    <div class="large-photo-item large-photo-item-4">
+                        <img src="./img/fotoprof4.jpg" alt="Retrato profesional 4" />
+                    </div>
+                    <!-- Remaining images in a flowing grid -->
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof5.jpg" alt="Sesión Batuk 1" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof6.jpg" alt="Sesión Batuk 2" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof7.jpg" alt="Foto profesional 7" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof8.jpg" alt="Foto profesional 8" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof9.jpg" alt="Foto profesional 9" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof10.jpg" alt="Foto profesional 10" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof11.jpg" alt="Foto profesional 11" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof12.jpg" alt="Foto profesional 12" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof13.jpg" alt="Foto profesional 13" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof14.jpg" alt="Foto profesional 14" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof15.jpg" alt="Foto profesional 15" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof16.jpg" alt="Foto profesional 16" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof17.jpg" alt="Foto profesional 17" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof18.jpg" alt="Foto profesional 18" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof19.jpg" alt="Foto profesional 19" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof20.jpg" alt="Foto profesional 20" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof21.jpg" alt="Foto profesional 21" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof22.jpg" alt="Foto profesional 22" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof23.jpg" alt="Foto profesional 23" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof24.jpg" alt="Foto profesional 24" />
+                    </div>
+                    <div class="large-photo-item">
+                        <img src="./img/fotoprof25.jpg" alt="Foto profesional 25" />
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Contacto Section -->
+            <section id="contacto" class="section content-section">
+                <div class="contact-content">
+                    <a href="mailto:info@luchochavez.com" class="contact-link">info@luchochavez.com</a>
+                    <a href="tel:+5491123456789" class="contact-link">+54 9 11 2345-6789</a>
+                    <span class="contact-link">Buenos Aires, Argentina</span>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close">&times;</span>
+        <img class="image-modal-content" id="modalImage" alt="Imagen en pantalla completa" />
+        <div id="modalCaption" class="image-modal-caption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
