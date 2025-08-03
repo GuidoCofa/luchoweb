@@ -24,6 +24,7 @@ body {
 .container {
   display: flex;
   height: 100%; /* Ensure container takes full height */
+  position: relative; /* MODIFIED: Added for absolute positioning of main-content */
 }
 
 .sidebar {
@@ -162,25 +163,31 @@ body {
 }
 
 .main-content {
-  flex-grow: 1; /* Allow main-content to take remaining space */
-  position: relative;
+  flex-grow: 1;
+  position: absolute; /* MODIFIED: Changed to absolute */
+  top: 0; /* MODIFIED: Set top to 0 by default */
+  left: 0; /* MODIFIED: Set left to 0 by default */
+  right: 0; /* MODIFIED: Set right to 0 by default */
+  height: 100%; /* MODIFIED: Set height to 100% by default */
   overflow-y: auto; /* This is the main scrollbar */
   overflow-x: hidden;
-  transition: margin-left 0.3s ease, width 0.3s ease, padding-top 0.3s ease;
-  height: 100%; /* Ensure it takes full height of container */
+  transition: left 0.3s ease, width 0.3s ease, top 0.3s ease, height 0.3s ease; /* MODIFIED: Adjusted transitions */
 }
 
 .main-content.with-sidebar {
-  margin-left: 260px; /* Coincide con el ancho del sidebar */
-  width: calc(100% - 260px);
-  padding-top: 0;
-  overflow-y: hidden;
+  left: 260px; /* MODIFIED: Use left to position */
+  width: calc(100% - 260px); /* MODIFIED: Calculate width */
+  top: 0; /* MODIFIED: Starts from top of container */
+  height: 100%; /* MODIFIED: Takes full height of container */
+  overflow-y: hidden; /* MODIFIED: Hide scrollbar when sidebar is active */
 }
 
 .main-content.with-top-navbar {
-  margin-left: 0; /* Ocupa todo el ancho cuando la barra superior está activa */
-  width: 100%;
-  padding-top: 80px; /* Removed padding-top here */
+  left: 0; /* MODIFIED: Starts from left edge */
+  width: 100%; /* MODIFIED: Takes full width */
+  top: 80px; /* MODIFIED: Starts below top navbar */
+  height: calc(100% - 80px); /* MODIFIED: Takes remaining height */
+  padding-top: 0; /* MODIFIED: Removed padding-top here */
 }
 
 .section {
@@ -204,7 +211,7 @@ body {
   display: flex; /* Explicitly set to flex for centering */
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 100%; /* MODIFIED: Use 100% of main-content height */
   padding: 0;
 }
 
@@ -248,13 +255,13 @@ body {
 .content-section {
   display: block; /* Ensure it's block for content flow */
   min-height: auto; /* Allow height to shrink to content */
-  padding: 0 60px 80px 60px; /* MODIFIED: Adjusted top padding for desktop (90px) */
+  padding: 30px 60px 80px 60px; /* MODIFIED: Consistent padding for content sections */
   align-items: flex-start; /* Align content to top */
   justify-content: flex-start; /* Align content to left */
 }
 
 .content-block {
-  max-width: 800px; /* Max width for text content */
+  max-width: 1600px; /* MODIFIED: Increased max-width to give more space for 4 columns */
   text-align: left;
   padding: 0; /* Remove extra padding */
 }
@@ -263,7 +270,7 @@ body {
   font-family: "Inter", sans-serif;
   font-size: 40px;
   font-weight: 500;
-  margin-top: 10px; /* Removed margin-top, now handled by content-section padding */
+  margin-top: 0; /* MODIFIED: Removed margin-top, now handled by content-section padding */
   margin-bottom: 30px;
   color: #000;
 }
@@ -304,11 +311,6 @@ body {
 }
 
 /* Large Photo Grid (for Fotos section) */
-#fotos {
-  box-sizing: border-box;
-  display: block;
-}
-
 #fotos .large-photo-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -473,6 +475,84 @@ body {
   width: 100%;
 }
 
+/* New grid styles for Trayectoria and Prensa */
+/* media-grid for Trayectoria (3 columns) */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 30px; /* Added margin-top for consistency */
+}
+
+/* video-grid for Prensa (3 columns) */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 30px; /* Space between video grid and image grid */
+}
+
+/* image-grid for Prensa (4 columns) */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* MODIFIED: 4 columns for images */
+  gap: 20px; /* MODIFIED: Reduced gap for more image space */
+}
+
+/* Styles for media items (common to video and image grids) */
+.media-item {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.media-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.media-item video,
+.media-item img {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* Default vertical aspect ratio */
+  object-fit: cover; /* Default to cover for other sections */
+  display: block;
+}
+
+/* Specific aspect ratio for videos in the video-grid (Prensa) */
+.video-grid .media-item video {
+  aspect-ratio: 16 / 9; /* Make videos in video-grid wider */
+}
+
+/* IMPORTANT: Ensure images in image-grid (Prensa) show entirely */
+.image-grid .media-item img {
+  object-fit: contain; /* Changed to contain for Prensa images */
+}
+
+.media-item .media-title {
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin: 15px 15px 5px 15px;
+  line-height: 1.3;
+}
+
+.media-item .media-description {
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+  padding: 0 15px 15px 15px;
+  line-height: 1.5;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .sidebar {
@@ -528,7 +608,7 @@ body {
 
   .section-title {
     font-size: 32px;
-    margin-top: 10px;
+    margin-top: 0; /* MODIFIED: Removed margin-top, now handled by content-section padding */
   }
 
   .section-text {
@@ -586,19 +666,32 @@ body {
   }
 
   .main-content.with-top-navbar {
-    padding-top: 60px; /* Adjusted padding-top for mobile top navbar */
+    top: 60px; /* MODIFIED: Starts below mobile top navbar */
+    height: calc(100% - 60px); /* MODIFIED: Takes remaining height */
   }
 
   .content-section {
-    padding: 0 30px 40px 30px; /* MODIFIED: Adjusted top padding for mobile (80px) */
+    padding: 30px 30px 40px 30px; /* MODIFIED: Consistent padding for mobile content sections */
   }
+  /* Mobile adjustments for new grids */
+  .video-grid,
+  .image-grid,
   .media-grid {
+    /* Ensure media-grid also becomes single column on mobile */
     grid-template-columns: 1fr; /* Single column on mobile */
     gap: 20px;
   }
   .media-item video,
   .media-item img {
     aspect-ratio: 3 / 4; /* Maintain vertical aspect ratio on mobile */
+  }
+  /* Override for mobile to ensure videos are vertical again */
+  .video-grid .media-item video {
+    aspect-ratio: 3 / 4;
+  }
+  /* Override for mobile to ensure images are vertical again */
+  .image-grid .media-item img {
+    object-fit: contain; /* Keep contain for mobile too */
   }
   .media-item .media-title {
     font-size: 18px;
@@ -758,70 +851,39 @@ html {
   }
 }
 
-/* New styles for Trayectoria section */
-.media-grid {
+/* New styles for the photo gallery grid */
+.photo-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-  gap: 30px; /* Space between items */
-  margin-top: 30px;
-}
-
-.media-item {
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.media-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.media-item video,
-.media-item img {
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 20px; /* Gap between images */
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  max-width: 1600px; /* Adjust as needed */
+  margin: 0 auto;
+}
+
+.photo-gallery-item {
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+}
+
+.photo-gallery-item:hover {
+  transform: scale(1.02);
+}
+
+.photo-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure images fill the space without distortion */
   display: block;
+  filter: none; /* Ensure no filters are applied */
 }
 
-.media-item .media-title {
-  font-family: "Inter", sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  color: #000;
-  margin: 15px 15px 5px 15px;
-  line-height: 1.3;
-}
-
-.media-item .media-description {
-  font-family: "Inter", sans-serif;
-  font-size: 15px;
-  color: #555;
-  padding: 0 15px 15px 15px;
-  line-height: 1.5;
-}
-
-/* Mobile adjustments for media grid */
+/* Mobile adjustments for photo gallery */
 @media (max-width: 768px) {
-  .media-grid {
+  .photo-gallery-grid {
     grid-template-columns: 1fr; /* Single column on mobile */
-    gap: 20px;
-  }
-  .media-item video,
-  .media-item img {
-    aspect-ratio: 3 / 4; /* Maintain vertical aspect ratio on mobile */
-  }
-  .media-item .media-title {
-    font-size: 18px;
-  }
-  .media-item .media-description {
-    font-size: 14px;
+    gap: 15px;
   }
 }
