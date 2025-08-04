@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initializeApp() {
   console.log("Initializing app...")
-
-  // Asegurarse de que la sección "principal" esté activa al cargar
   const initialSection = document.getElementById("principal")
   if (initialSection) {
     initialSection.classList.add("active")
@@ -19,34 +17,35 @@ function initializeApp() {
   initNavigation()
   initImageModal()
 
-  console.log("🎙️ Lucho Chávez - Portfolio minimalista cargado")
+  console.log("🎧 Lucho Chávez - Portfolio minimalista cargado")
 }
 
-// Navegación y funcionalidad principal
 function initNavigation() {
   const navLinks = document.querySelectorAll(".nav-link")
   const sections = document.querySelectorAll(".section")
   const sidebar = document.querySelector(".sidebar")
   const topNavbar = document.querySelector(".top-navbar")
   const mainContent = document.querySelector(".main-content")
-  const heroImageWrapper = document.querySelector(".hero-image-wrapper") // Obtener referencia a la imagen hero
+  const heroImageWrapper = document.querySelector(".hero-image-wrapper")
 
-  console.log("navLinks found:", navLinks.length)
-  console.log("sections found:", sections.length)
-  console.log("sidebar found:", !!sidebar)
-  console.log("topNavbar found:", !!topNavbar)
-  console.log("mainContent found:", !!mainContent)
-  console.log("heroImageWrapper found:", !!heroImageWrapper) // Log para verificar
-
-  // Crear botón de menú móvil
   const mobileMenuBtn = document.createElement("button")
   mobileMenuBtn.className = "mobile-menu"
   mobileMenuBtn.innerHTML = "☰"
   document.body.appendChild(mobileMenuBtn)
 
-  // Función para actualizar la visibilidad de sidebar/navbar y clases de main-content
   const updateLayout = (sectionId) => {
-    // Primero, ocultar todas las secciones
+    // Pausar y reiniciar videos de la sección que se desactiva
+    const currentActiveSectionElement = document.querySelector(".section.active")
+    if (currentActiveSectionElement && currentActiveSectionElement.id !== sectionId) {
+      const videosInInactiveSection = currentActiveSectionElement.querySelectorAll("video")
+      videosInInactiveSection.forEach((video) => {
+        video.pause()
+        video.currentTime = 0
+        // Forzamos la recarga del estado del video para que el póster reaparezca
+        video.src = video.src
+      })
+    }
+
     sections.forEach((s) => s.classList.remove("active"))
 
     if (sectionId === "principal") {
@@ -57,7 +56,7 @@ function initNavigation() {
       mainContent.classList.remove("with-top-navbar")
       mainContent.classList.add("with-sidebar")
       if (heroImageWrapper) {
-        heroImageWrapper.classList.remove("hidden") // Mostrar hero image en la sección principal
+        heroImageWrapper.classList.remove("hidden")
       }
     } else {
       sidebar.classList.remove("visible")
@@ -67,37 +66,27 @@ function initNavigation() {
       mainContent.classList.remove("with-sidebar")
       mainContent.classList.add("with-top-navbar")
       if (heroImageWrapper) {
-        heroImageWrapper.classList.add("hidden") // Ocultar hero image en otras secciones
+        heroImageWrapper.classList.add("hidden")
       }
     }
 
-    // Mostrar la sección correspondiente
     const targetSection = document.getElementById(sectionId)
     if (targetSection) {
       targetSection.classList.add("active")
-      // Desplazar a la parte superior de la sección activa
+      // 🔄 CAMBIO CRÍTICO: usamos scroll del body
       setTimeout(() => {
-        mainContent.scrollTo({ top: 0, behavior: "smooth" })
-      }, 50) // Pequeño retraso para asegurar que el layout se haya aplicado
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }, 50)
     }
   }
 
-  // Manejar clicks en navegación sidebar y top navbar
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault()
-
-      // Remover clase active de todos los enlaces
       navLinks.forEach((l) => l.classList.remove("active"))
-
-      // Agregar clase active al enlace clickeado (tanto en sidebar como en top navbar)
       const sectionId = this.getAttribute("data-section")
       document.querySelectorAll(`[data-section="${sectionId}"]`).forEach((el) => el.classList.add("active"))
-
-      // Actualizar el layout (sidebar/top navbar) y desplazar
       updateLayout(sectionId)
-
-      // Cerrar menú móvil si está abierto
       if (window.innerWidth <= 768 && sidebar.classList.contains("open")) {
         sidebar.classList.remove("open")
         mobileMenuBtn.innerHTML = "☰"
@@ -105,13 +94,11 @@ function initNavigation() {
     })
   })
 
-  // Funcionalidad menú móvil
   mobileMenuBtn.addEventListener("click", function () {
     sidebar.classList.toggle("open")
     this.innerHTML = sidebar.classList.contains("open") ? "✕" : "☰"
   })
 
-  // Cerrar menú móvil al hacer click fuera
   document.addEventListener("click", (e) => {
     if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
       sidebar.classList.remove("open")
@@ -119,7 +106,6 @@ function initNavigation() {
     }
   })
 
-  // Navegación con teclado
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && sidebar.classList.contains("open")) {
       sidebar.classList.remove("open")
@@ -127,40 +113,32 @@ function initNavigation() {
     }
   })
 
-  // Efectos hover en imágenes
   const images = document.querySelectorAll("img")
   images.forEach((img) => {
-    // Excluir la imagen principal del efecto hover
     if (!img.closest(".hero-image-wrapper")) {
       img.addEventListener("mouseenter", function () {
         this.style.transform = "scale(1.02)"
       })
-
       img.addEventListener("mouseleave", function () {
         this.style.transform = "scale(1)"
       })
     }
   })
 
-  // Inicializar el layout al cargar la página
   const initialActiveSection = document.querySelector(".nav-link.active")?.getAttribute("data-section") || "principal"
   updateLayout(initialActiveSection)
 }
 
-// Smooth scrolling
 document.documentElement.style.scrollBehavior = "smooth"
 
-// Animación de carga
 window.addEventListener("load", () => {
   document.body.style.opacity = "0"
   document.body.style.transition = "opacity 0.5s ease"
-
   setTimeout(() => {
     document.body.style.opacity = "1"
   }, 100)
 })
 
-// Image Modal functionality
 function initImageModal() {
   const modal = document.getElementById("imageModal")
   const modalImg = document.getElementById("modalImage")
