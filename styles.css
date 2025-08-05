@@ -1459,3 +1459,136 @@ html {
   color: #222;
   white-space: nowrap;
 }
+
+/* ================== Solución Trayectoria ================== */
+/* 1) Grilla responsive que nunca corta el texto */
+#trayectoria .trayectoria-videos {
+  display: grid;
+  /* Mínimo 250px por tarjeta, y tantas como quepan */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* Cada fila escala su altura al contenido */
+  grid-auto-rows: min-content;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* 2) Asegura que cada tarjeta muestre TODO su título */
+#trayectoria .trayectoria-videos .media-item {
+  /* Altura auto y sin overflow oculto */
+  height: auto !important;
+  overflow: visible !important;
+}
+
+#trayectoria .trayectoria-videos .media-item .media-title {
+  /* Permitir quiebres de palabra normales */
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-overflow: clip;
+}
+
+/* ——— Tablet: 769px a 1210px ——— */
+@media (min-width: 769px) and (max-width: 1210px) {
+  /* 1) Permite overflow para no cortar nada */
+  #principal {
+    overflow: visible;
+  }
+
+  /* 2) Layout: altura automática y gap reducido */
+  .homepage-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 60px !important;     /* algo menor que en desktop */
+    height: auto !important;   /* que ajuste altura */
+    padding: 40px 20px;        /* padding interior */
+  }
+
+  /* 3) Sidebar: ajusta padding para que quepa */
+  .homepage-navigation {
+    padding-left: 20px !important;
+    flex: 0 0 auto;
+    height: auto !important;
+  }
+
+  /* 4) Imagen: no supere el ancho disponible */
+  .homepage-image {
+    padding-right: 20px !important;
+    flex: 0 0 auto;
+  }
+  .homepage-image img {
+    max-width: 40vw !important;  /* ocupa hasta 40% del viewport */
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
+/* — Tablet ajustes para Contacto (≤1024px) — */
+@media (max-width: 1024px) {
+  #contacto .contact-layout {
+    grid-template-columns: 1fr;  /* Una sola columna */
+    gap: 40px;
+    text-align: center;
+  }
+
+  /* Imagen adaptativa: ancho relativo y altura automática */
+  .contact-image-wrapper {
+    width: 80%;            /* Ocupa el 80% del contenedor */
+    max-width: 400px;      /* No supere 400px de ancho */
+    aspect-ratio: 1 / 1;   /* Mantiene proporción cuadrada */
+    height: auto;          /* Altura según el ancho */
+    margin: 0 auto;
+  }
+
+  /* La imagen interna llena totalmente el wrapper */
+  .contact-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ————— Destacados: 1 video por fila en móvil (<766px) ————— */
+@media (max-width: 766px) {
+  #destacados .destacados-videos {
+    display: grid !important;
+    grid-template-columns: 1fr !important;    /* una sola columna */
+    grid-auto-rows: min-content !important;   /* altura según contenido */
+    gap: 30px !important;                     /* espacio entre videos */
+    margin-top: 20px !important;
+  }
+
+  /* Cada ítem debe permitir altura automática */
+  #destacados .destacados-videos .media-item {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* El iframe/video ocupa todo el ancho */
+  #destacados .destacados-videos .media-item iframe {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;                     /* mantiene proporción */
+  }
+}
+
+/* ————— Destacados: vídeos verticales grandes en móvil (<766px) ————— */
+@media (max-width: 766px) {
+  /* Una sola columna para que el vídeo ocupe todo el ancho disponible */
+  #destacados .media-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 0 10px;    /* Reduce padding lateral */
+  }
+
+  /* Vídeo vertical: retrato, ancho casi completo y centrado */
+  #destacados .media-grid .media-item video {
+    aspect-ratio: 3 / 4 !important;      /* Mantén la proporción vertical portrait */
+    width: 90vw !important;              /* Ocupa 90% del viewport */
+    max-width: 400px !important;         /* Límite razonable en móviles */
+    height: auto !important;             /* Ajusta la altura acorde al ancho */
+    display: block;
+    margin: 0 auto;                      /* Centrado horizontal */
+    object-fit: cover !important;        /* Que cubra sin deformar */
+  }
+}

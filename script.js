@@ -15,7 +15,6 @@ function initializeApp() {
   }
 
   initNavigation()
-  initImageModal()
 
   console.log("🎧 Lucho Chávez - Portfolio minimalista cargado")
 }
@@ -215,31 +214,25 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-// 2) Referencia al nodo 'visits'
-const visitsRef = firebase.database().ref('visits');
+const visitsRef  = firebase.database().ref('visits');
+const initialCount = 25390;
 
-// 3) Número de inicio ficticio
-// … inicialización Firebase y visitsRef como antes …
-
-const initialCount = 12931;
-
+console.log("💾 Intentando transacción con initialCount =", initialCount);
 visitsRef.transaction(current => {
-  if (current === null || current < initialCount) {
-    return initialCount;
-  }
+  console.log("  valor current en DB:", current);
+  if (current === null || current < initialCount) return initialCount;
   return current + 1;
 }, (error, committed, snapshot) => {
+  console.log({ error, committed, newValue: snapshot && snapshot.val() });
   const el = document.getElementById('visit-counter');
   if (error) {
-    console.error('Error en transacción:', error);
     el.textContent = 'Visitas: —';
+    console.error("❌ Transaction error:", error);
   } else if (!committed) {
-    console.warn('Transacción NO permitida por las reglas de seguridad');
-    // Opcional: lee sin incrementar para mostrar el valor actual
-    visitsRef.once('value', snap => {
-      el.textContent = `Visitas: ${snap.val().toLocaleString()}`;
-    });
+    el.textContent = `Visitas: ${snapshot.val()?.toLocaleString() || '—'}`;
+    console.warn("⚠️ Transaction NO committed (reglas rechazaron):", snapshot.val());
   } else {
     el.textContent = `Visitas: ${snapshot.val().toLocaleString()}`;
+    console.log("✅ Transacción OK. Nuevo valor:", snapshot.val());
   }
 });
