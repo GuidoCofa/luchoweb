@@ -197,3 +197,49 @@ window.addEventListener("load", () => {
   }, 100)
 })
 
+// ====================================
+// Contador de visitas global (Firebase)
+// ====================================
+
+// 1) Configuración de Firebase (compat)
+//    Asegúrate de haber cargado antes firebase-app-compat.js y firebase-database-compat.js
+const firebaseConfig = {
+  apiKey: "AIzaSyCc0sRr0_Rxh-KRojw7hufaGXr9IaLqAYI",
+  authDomain: "luchoweb-7d1d6.firebaseapp.com",
+  databaseURL: "https://luchoweb-7d1d6-default-rtdb.firebaseio.com",
+  projectId: "luchoweb-7d1d6",
+  storageBucket: "luchoweb-7d1d6.appspot.com",
+  messagingSenderId: "618672046355",
+  appId: "1:618672046355:web:e52d33854123e9a20f9ae6",
+  measurementId: "G-T16DQJTECK"
+};
+firebase.initializeApp(firebaseConfig);
+
+// 2) Referencia al nodo 'visits'
+const visitsRef = firebase.database().ref('visits');
+
+// 3) Número de inicio ficticio
+// … inicialización Firebase y visitsRef como antes …
+
+const initialCount = 12931;
+
+visitsRef.transaction(current => {
+  if (current === null || current < initialCount) {
+    return initialCount;
+  }
+  return current + 1;
+}, (error, committed, snapshot) => {
+  const el = document.getElementById('visit-counter');
+  if (error) {
+    console.error('Error en transacción:', error);
+    el.textContent = 'Visitas: —';
+  } else if (!committed) {
+    console.warn('Transacción NO permitida por las reglas de seguridad');
+    // Opcional: lee sin incrementar para mostrar el valor actual
+    visitsRef.once('value', snap => {
+      el.textContent = `Visitas: ${snap.val().toLocaleString()}`;
+    });
+  } else {
+    el.textContent = `Visitas: ${snapshot.val().toLocaleString()}`;
+  }
+});

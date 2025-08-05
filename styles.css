@@ -1436,3 +1436,26 @@ html {
     padding: 0 10px !important;             /* Margen lateral para respirar */
   }
 }
+
+/* —————————————
+   Contador-footer en #principal (todas las vistas)
+   ————————————— */
+#principal {
+  position: relative;    /* ancla para el contador absolute */
+  min-height: 100vh;     /* que ocupe toda la altura del viewport */
+  overflow: hidden;      /* evita que aparezca scroll por el absolute */
+}
+
+#principal .visit-counter {
+  position: absolute;
+  bottom: 20px;          /* separación desde la base */
+  left: 50%;             /* punto de inicio */
+  transform: translateX(-50%); /* centrar exactamente */
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 1.60rem;
+  font-weight: bolder;
+  color: #222;
+  white-space: nowrap;
+}
