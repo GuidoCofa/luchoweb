@@ -28,57 +28,82 @@ function initNavigation() {
   const mainContent = document.querySelector(".main-content")
   const heroImageWrapper = document.querySelector(".hero-image-wrapper")
 
-  const mobileMenuBtn = document.createElement("button")
-  mobileMenuBtn.className = "mobile-menu"
-  mobileMenuBtn.innerHTML = "☰"
-  document.body.appendChild(mobileMenuBtn)
+  // Create mobile menu button if it doesn't exist
+  let mobileMenuBtn = document.querySelector(".mobile-menu")
+  if (!mobileMenuBtn) {
+    mobileMenuBtn = document.createElement("button")
+    mobileMenuBtn.className = "mobile-menu"
+    mobileMenuBtn.innerHTML = "☰"
+    document.body.appendChild(mobileMenuBtn)
+  }
 
   const updateLayout = (sectionId) => {
+    const isMobile = window.innerWidth <= 768;
+
     // Pausar y reiniciar videos de la sección que se desactiva
-    const currentActiveSectionElement = document.querySelector(".section.active")
+    const currentActiveSectionElement = document.querySelector(".section.active");
     if (currentActiveSectionElement && currentActiveSectionElement.id !== sectionId) {
-      const videosInInactiveSection = currentActiveSectionElement.querySelectorAll("video")
+      const videosInInactiveSection = currentActiveSectionElement.querySelectorAll("video");
       videosInInactiveSection.forEach((video) => {
-        video.pause()
-        video.currentTime = 0
-        // Forzamos la recarga del estado del video para que el póster reaparezca
-        video.src = video.src
-      })
+        video.pause();
+        video.currentTime = 0;
+        video.load(); // Use .load() to reset and show poster
+      });
     }
 
-    sections.forEach((s) => s.classList.remove("active"))
+    sections.forEach((s) => s.classList.remove("active"));
 
-    if (sectionId === "principal") {
-      sidebar.classList.remove("hidden")
-      sidebar.classList.add("visible")
-      topNavbar.classList.remove("visible")
-      topNavbar.classList.add("hidden")
-      mainContent.classList.remove("with-top-navbar")
-      mainContent.classList.add("with-sidebar")
-      if (heroImageWrapper) {
-        heroImageWrapper.classList.remove("hidden")
+    if (!isMobile) {
+      // Desktop behavior
+      if (sectionId === "principal") {
+        sidebar.classList.remove("hidden");
+        sidebar.classList.add("visible");
+        topNavbar.classList.remove("visible");
+        topNavbar.classList.add("hidden");
+        mainContent.classList.remove("with-top-navbar");
+        mainContent.classList.add("with-sidebar");
+      } else {
+        sidebar.classList.remove("visible");
+        sidebar.classList.add("hidden");
+        topNavbar.classList.remove("hidden");
+        topNavbar.classList.add("visible");
+        mainContent.classList.remove("with-sidebar");
+        mainContent.classList.add("with-top-navbar");
       }
     } else {
-      sidebar.classList.remove("visible")
-      sidebar.classList.add("hidden")
-      topNavbar.classList.remove("hidden")
-      topNavbar.classList.add("visible")
-      mainContent.classList.remove("with-sidebar")
-      mainContent.classList.add("with-top-navbar")
-      if (heroImageWrapper) {
-        heroImageWrapper.classList.add("hidden")
+      // Mobile behavior
+      // Top navbar is always visible on mobile
+      topNavbar.classList.remove("hidden");
+      topNavbar.classList.add("visible");
+      mainContent.classList.remove("with-sidebar", "with-top-navbar"); // Always full width
+
+      // Sidebar visibility on mobile based on sectionId
+      if (sectionId === "principal") {
+        sidebar.classList.add("open"); // Open sidebar by default on 'principal'
+        mobileMenuBtn.innerHTML = "✕"; // Show close icon
+      } else {
+        sidebar.classList.remove("open"); // Close sidebar on other sections
+        mobileMenuBtn.innerHTML = "☰"; // Show hamburger icon
       }
     }
 
-    const targetSection = document.getElementById(sectionId)
-    if (targetSection) {
-      targetSection.classList.add("active")
-      // 🔄 CAMBIO CRÍTICO: usamos scroll del body
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" })
-      }, 50)
+    // Hero image visibility logic (applies to both mobile and desktop)
+    if (heroImageWrapper) {
+      if (sectionId === "principal") {
+        heroImageWrapper.classList.remove("hidden");
+      } else {
+        heroImageWrapper.classList.add("hidden");
+      }
     }
-  }
+
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+      targetSection.classList.add("active");
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 50);
+    }
+  };
 
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
@@ -87,7 +112,8 @@ function initNavigation() {
       const sectionId = this.getAttribute("data-section")
       document.querySelectorAll(`[data-section="${sectionId}"]`).forEach((el) => el.classList.add("active"))
       updateLayout(sectionId)
-      if (window.innerWidth <= 768 && sidebar.classList.contains("open")) {
+      if (window.innerWidth <= 768 && sidebar.classList.contains("open") && sectionId !== "principal") {
+        // Only close sidebar if not on principal section on mobile
         sidebar.classList.remove("open")
         mobileMenuBtn.innerHTML = "☰"
       }
@@ -100,7 +126,13 @@ function initNavigation() {
   })
 
   document.addEventListener("click", (e) => {
-    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+    // Check if click is outside sidebar and mobile menu button when sidebar is open on mobile
+    if (
+      window.innerWidth <= 768 &&
+      sidebar.classList.contains("open") &&
+      !sidebar.contains(e.target) &&
+      !mobileMenuBtn.contains(e.target)
+    ) {
       sidebar.classList.remove("open")
       mobileMenuBtn.innerHTML = "☰"
     }
@@ -113,20 +145,19 @@ function initNavigation() {
     }
   })
 
-  const images = document.querySelectorAll("img")
-  images.forEach((img) => {
-    if (!img.closest(".hero-image-wrapper")) {
-      img.addEventListener("mouseenter", function () {
-        this.style.transform = "scale(1.02)"
-      })
-      img.addEventListener("mouseleave", function () {
-        this.style.transform = "scale(1)"
-      })
-    }
-  })
-
+  // Initial layout update on load
   const initialActiveSection = document.querySelector(".nav-link.active")?.getAttribute("data-section") || "principal"
   updateLayout(initialActiveSection)
+
+  // Handle resize events to adjust layout
+  window.addEventListener("resize", () => {
+    const currentSectionId = document.querySelector(".section.active")?.id || "principal";
+    updateLayout(currentSectionId); // Re-evaluate layout on resize based on current section
+    if (window.innerWidth > 768 && sidebar.classList.contains("open")) {
+      sidebar.classList.remove("open"); // Close sidebar if resized to desktop
+      mobileMenuBtn.innerHTML = "☰";
+    }
+  });
 }
 
 document.documentElement.style.scrollBehavior = "smooth"
@@ -144,7 +175,8 @@ function initImageModal() {
   const modalImg = document.getElementById("modalImage")
   const modalCaption = document.getElementById("modalCaption")
   const closeModalBtn = document.querySelector(".image-modal-close")
-  const photoItems = document.querySelectorAll(".large-photo-item")
+  // Select all photo items that can open the modal
+  const photoItems = document.querySelectorAll(".photo-gallery-item, .large-photo-item")
 
   if (modal && modalImg && closeModalBtn) {
     photoItems.forEach((item) => {
@@ -156,13 +188,13 @@ function initImageModal() {
         if (modalCaption) {
           modalCaption.textContent = altText
         }
-        document.body.style.overflow = "hidden"
+        document.body.style.overflow = "hidden" // Prevent scrolling when modal is open
       })
     })
 
     const closeModalFunction = () => {
       modal.classList.remove("active")
-      document.body.style.overflow = "auto"
+      document.body.style.overflow = "auto" // Restore scrolling
     }
 
     closeModalBtn.addEventListener("click", closeModalFunction)
