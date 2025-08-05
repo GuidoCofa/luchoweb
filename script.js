@@ -21,21 +21,16 @@ function initializeApp() {
 }
 
 function initNavigation() {
-  const navLinks = document.querySelectorAll(".nav-link")
+  const navLinks = document.querySelectorAll(".nav-link, .homepage-nav-link")
   const sections = document.querySelectorAll(".section")
   const sidebar = document.querySelector(".sidebar")
   const topNavbar = document.querySelector(".top-navbar")
   const mainContent = document.querySelector(".main-content")
   const heroImageWrapper = document.querySelector(".hero-image-wrapper")
+  const mobileOverlay = document.querySelector(".mobile-overlay")
 
-  // Create mobile menu button if it doesn't exist
-  let mobileMenuBtn = document.querySelector(".mobile-menu")
-  if (!mobileMenuBtn) {
-    mobileMenuBtn = document.createElement("button")
-    mobileMenuBtn.className = "mobile-menu"
-    mobileMenuBtn.innerHTML = "☰"
-    document.body.appendChild(mobileMenuBtn)
-  }
+  // Get mobile menu button (now in HTML)
+  const mobileMenuBtn = document.querySelector(".mobile-menu")
 
   const updateLayout = (sectionId) => {
     const isMobile = window.innerWidth <= 768;
@@ -56,13 +51,14 @@ function initNavigation() {
     if (!isMobile) {
       // Desktop behavior
       if (sectionId === "principal") {
-        sidebar.classList.remove("hidden");
-        sidebar.classList.add("visible");
+        // Homepage: hide both sidebar and top navbar
+        sidebar.classList.remove("visible");
+        sidebar.classList.add("hidden");
         topNavbar.classList.remove("visible");
         topNavbar.classList.add("hidden");
-        mainContent.classList.remove("with-top-navbar");
-        mainContent.classList.add("with-sidebar");
+        mainContent.classList.remove("with-sidebar", "with-top-navbar");
       } else {
+        // Other sections: hide sidebar, show top navbar
         sidebar.classList.remove("visible");
         sidebar.classList.add("hidden");
         topNavbar.classList.remove("hidden");
@@ -71,29 +67,24 @@ function initNavigation() {
         mainContent.classList.add("with-top-navbar");
       }
     } else {
-      // Mobile behavior
-      // Top navbar is always visible on mobile
-      topNavbar.classList.remove("hidden");
-      topNavbar.classList.add("visible");
+      // Mobile behavior - hide top navbar, show only sidebar when opened
+      topNavbar.classList.remove("visible");
+      topNavbar.classList.add("hidden");
       mainContent.classList.remove("with-sidebar", "with-top-navbar"); // Always full width
 
-      // Sidebar visibility on mobile based on sectionId
-      if (sectionId === "principal") {
-        sidebar.classList.add("open"); // Open sidebar by default on 'principal'
-        mobileMenuBtn.innerHTML = "✕"; // Show close icon
-      } else {
-        sidebar.classList.remove("open"); // Close sidebar on other sections
+      // On mobile, sidebar is hidden by default and shown with menu button
+      sidebar.classList.remove("open"); // Close sidebar by default
+      if (mobileOverlay) {
+        mobileOverlay.classList.remove("active");
+      }
+      if (mobileMenuBtn) {
         mobileMenuBtn.innerHTML = "☰"; // Show hamburger icon
       }
     }
 
-    // Hero image visibility logic (applies to both mobile and desktop)
+    // Hero image is always hidden now (using new homepage layout)
     if (heroImageWrapper) {
-      if (sectionId === "principal") {
-        heroImageWrapper.classList.remove("hidden");
-      } else {
-        heroImageWrapper.classList.add("hidden");
-      }
+      heroImageWrapper.classList.add("hidden");
     }
 
     const targetSection = document.getElementById(sectionId);
@@ -112,18 +103,28 @@ function initNavigation() {
       const sectionId = this.getAttribute("data-section")
       document.querySelectorAll(`[data-section="${sectionId}"]`).forEach((el) => el.classList.add("active"))
       updateLayout(sectionId)
-      if (window.innerWidth <= 768 && sidebar.classList.contains("open") && sectionId !== "principal") {
-        // Only close sidebar if not on principal section on mobile
+      if (window.innerWidth <= 768 && sidebar.classList.contains("open")) {
+        // Close sidebar after navigation on mobile
         sidebar.classList.remove("open")
-        mobileMenuBtn.innerHTML = "☰"
+        if (mobileOverlay) {
+          mobileOverlay.classList.remove("active")
+        }
+        if (mobileMenuBtn) {
+          mobileMenuBtn.innerHTML = "☰"
+        }
       }
     })
   })
 
-  mobileMenuBtn.addEventListener("click", function () {
-    sidebar.classList.toggle("open")
-    this.innerHTML = sidebar.classList.contains("open") ? "✕" : "☰"
-  })
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", function () {
+      sidebar.classList.toggle("open")
+      if (mobileOverlay) {
+        mobileOverlay.classList.toggle("active")
+      }
+      this.innerHTML = sidebar.classList.contains("open") ? "✕" : "☰"
+    })
+  }
 
   document.addEventListener("click", (e) => {
     // Check if click is outside sidebar and mobile menu button when sidebar is open on mobile
@@ -131,17 +132,38 @@ function initNavigation() {
       window.innerWidth <= 768 &&
       sidebar.classList.contains("open") &&
       !sidebar.contains(e.target) &&
-      !mobileMenuBtn.contains(e.target)
+      (!mobileMenuBtn || !mobileMenuBtn.contains(e.target))
     ) {
       sidebar.classList.remove("open")
-      mobileMenuBtn.innerHTML = "☰"
+      if (mobileOverlay) {
+        mobileOverlay.classList.remove("active")
+      }
+      if (mobileMenuBtn) {
+        mobileMenuBtn.innerHTML = "☰"
+      }
     }
   })
+
+  // Close sidebar when clicking overlay
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener("click", () => {
+      sidebar.classList.remove("open")
+      mobileOverlay.classList.remove("active")
+      if (mobileMenuBtn) {
+        mobileMenuBtn.innerHTML = "☰"
+      }
+    })
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && sidebar.classList.contains("open")) {
       sidebar.classList.remove("open")
-      mobileMenuBtn.innerHTML = "☰"
+      if (mobileOverlay) {
+        mobileOverlay.classList.remove("active")
+      }
+      if (mobileMenuBtn) {
+        mobileMenuBtn.innerHTML = "☰"
+      }
     }
   })
 
@@ -155,7 +177,12 @@ function initNavigation() {
     updateLayout(currentSectionId); // Re-evaluate layout on resize based on current section
     if (window.innerWidth > 768 && sidebar.classList.contains("open")) {
       sidebar.classList.remove("open"); // Close sidebar if resized to desktop
-      mobileMenuBtn.innerHTML = "☰";
+      if (mobileOverlay) {
+        mobileOverlay.classList.remove("active");
+      }
+      if (mobileMenuBtn) {
+        mobileMenuBtn.innerHTML = "☰";
+      }
     }
   });
 }

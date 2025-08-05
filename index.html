@@ -24,6 +24,12 @@
     </div>
 </nav>
 
+<!-- Mobile Menu Button -->
+<button class="mobile-menu">☰</button>
+
+<!-- Mobile overlay -->
+<div class="mobile-overlay"></div>
+
 <div class="container">
     <!-- Left Sidebar -->
     <aside class="sidebar visible">
@@ -45,8 +51,22 @@
     <main class="main-content with-sidebar">
         <!-- Principal Section (Landing page with circular photo) -->
         <section id="principal" class="section active">
-            <div class="hero-image-wrapper">
-                <img src="./img/luchointrodeprueba.jpg" alt="Lucho Chávez - Principal" />
+            <div class="homepage-layout">
+                <div class="homepage-navigation">
+                    <h1 class="homepage-title">Lucho Chávez</h1>
+                    <p class="homepage-subtitle">Locutor Nacional - ISER</p>
+                    <p class="homepage-subtitle">Matr. 15533</p>
+                    <nav class="homepage-nav">
+                        <a href="#trayectoria" class="homepage-nav-link" data-section="trayectoria">Trayectoria</a>
+                        <a href="#prensa" class="homepage-nav-link" data-section="prensa">Prensa</a>
+                        <a href="#destacados" class="homepage-nav-link" data-section="destacados">Destacados</a>
+                        <a href="#fotos" class="homepage-nav-link" data-section="fotos">Fotos</a>
+                        <a href="#contacto" class="homepage-nav-link" data-section="contacto">Contacto</a>
+                    </nav>
+                </div>
+                <div class="homepage-image">
+                    <img src="./img/luchointrodeprueba.jpg" alt="Lucho Chávez - Principal" />
+                </div>
             </div>
         </section>
 
