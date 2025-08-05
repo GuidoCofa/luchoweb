@@ -52,39 +52,39 @@ function initNavigation() {
       // Desktop behavior
       if (sectionId === "principal") {
         // Homepage: hide both sidebar and top navbar
-        sidebar.classList.remove("visible");
-        sidebar.classList.add("hidden");
-        topNavbar.classList.remove("visible");
-        topNavbar.classList.add("hidden");
-        mainContent.classList.remove("with-sidebar", "with-top-navbar");
+        sidebar.classList.remove("visible")
+        sidebar.classList.add("hidden")
+        topNavbar.classList.remove("visible")
+        topNavbar.classList.add("hidden")
+        mainContent.classList.remove("with-sidebar", "with-top-navbar")
       } else {
         // Other sections: hide sidebar, show top navbar
-        sidebar.classList.remove("visible");
-        sidebar.classList.add("hidden");
-        topNavbar.classList.remove("hidden");
-        topNavbar.classList.add("visible");
-        mainContent.classList.remove("with-sidebar");
-        mainContent.classList.add("with-top-navbar");
+        sidebar.classList.remove("visible")
+        sidebar.classList.add("hidden")
+        topNavbar.classList.remove("hidden")
+        topNavbar.classList.add("visible")
+        mainContent.classList.remove("with-sidebar")
+        mainContent.classList.add("with-top-navbar")
       }
     } else {
       // Mobile behavior - hide top navbar, show only sidebar when opened
-      topNavbar.classList.remove("visible");
-      topNavbar.classList.add("hidden");
-      mainContent.classList.remove("with-sidebar", "with-top-navbar"); // Always full width
+      topNavbar.classList.remove("visible")
+      topNavbar.classList.add("hidden")
+      mainContent.classList.remove("with-sidebar", "with-top-navbar") // Always full width
 
       // On mobile, sidebar is hidden by default and shown with menu button
-      sidebar.classList.remove("open"); // Close sidebar by default
+      sidebar.classList.remove("open") // Close sidebar by default
       if (mobileOverlay) {
-        mobileOverlay.classList.remove("active");
+        mobileOverlay.classList.remove("active")
       }
       if (mobileMenuBtn) {
-        mobileMenuBtn.innerHTML = "☰"; // Show hamburger icon
+        mobileMenuBtn.innerHTML = "☰" // Show hamburger icon
       }
     }
 
     // Hero image is always hidden now (using new homepage layout)
     if (heroImageWrapper) {
-      heroImageWrapper.classList.add("hidden");
+      heroImageWrapper.classList.add("hidden")
     }
 
     const targetSection = document.getElementById(sectionId)
@@ -176,12 +176,12 @@ function initNavigation() {
     const currentSectionId = document.querySelector(".section.active")?.id || "principal"
     updateLayout(currentSectionId) // Re-evaluate layout on resize based on current section
     if (window.innerWidth > 768 && sidebar.classList.contains("open")) {
-      sidebar.classList.remove("open"); // Close sidebar if resized to desktop
+      sidebar.classList.remove("open") // Close sidebar if resized to desktop
       if (mobileOverlay) {
-        mobileOverlay.classList.remove("active");
+        mobileOverlay.classList.remove("active")
       }
       if (mobileMenuBtn) {
-        mobileMenuBtn.innerHTML = "☰";
+        mobileMenuBtn.innerHTML = "☰"
       }
     }
   })

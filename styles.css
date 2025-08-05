@@ -1406,7 +1406,7 @@ html {
     /* Que ocupe sólo lo necesario y reduzca padding */
     flex: 0 0 auto !important;
     height: auto !important;
-    padding-lst: 20px !important;
+    padding-left: 20px !important;
   }
 
   .homepage-image {
