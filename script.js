@@ -215,7 +215,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const visitsRef  = firebase.database().ref('visits');
-const initialCount = 25390;
+const initialCount = 33000;
 
 console.log("💾 Intentando transacción con initialCount =", initialCount);
 visitsRef.transaction(current => {
