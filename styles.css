@@ -1593,3 +1593,21 @@ html {
   }
 }
 
+/* Fix contador de visitas en mobile: siempre visible y sin recortes */
+@media (max-width: 768px) {
+  #principal .visit-counter {
+    position: fixed;                           /* sale del flujo de #principal */
+    left: 50%;
+    bottom: max(12px, env(safe-area-inset-bottom)); /* respeta barra del navegador */
+    transform: translateX(-50%);
+    z-index: 1005;                             /* por encima de sidebar (1001) y menú (1002) */
+    padding: 8px 14px;
+    border-radius: 10px;
+    line-height: 1.2;
+    font-size: clamp(16px, 3.8vw, 22px);       /* adapta tamaño */
+    max-width: calc(100vw - 32px);             /* evita desbordes en pantallas angostas */
+    text-align: center;
+    white-space: normal;                       /* permite salto si el número crece */
+
+  }
+}
